@@ -1,0 +1,73 @@
+!!!html
+
+%head
+  %title Rebbler
+
+  :css
+    #field { 
+      background-color: red; 
+      / margin: 5px; 
+      padding: 5px;
+      /box-shadow: 10px 10px 5px #888888;
+    }
+
+    #server { width: 200px;}
+
+    #results { 
+      border: 1px solid black; 
+      / min-height: 500px;
+      margin-top: 10px;
+      width: 100%;
+      }
+
+    #results tr:nth-child(odd) { background-color: #A2A2A2; }
+    #results .rbl { width: 200px; }
+    #results .response { width: 200px; }
+    #results tr.danger { background-color: yellow; }
+
+  %script{ :language => 'javascript', :src => 'https://code.jquery.com/jquery-2.1.1.min.js' }
+
+  :javascript
+    $(function() { 
+      $('#server').focus()
+
+      $('#server').keypress(function(e) { 
+        if(e.which == 13) 
+          $('#submit').click() 
+      })
+
+      $('#submit').click(function(e) {
+        $('#results tr:not(:first-child)').remove()
+        var host = window.location.host
+        var path = '/req'
+        var ws = new WebSocket('ws://' + host + path)
+
+        ws.onopen    = function()  { ws.send($('#server').get(0).value) }
+
+        ws.onclose   = function()  { console.log('websocket closed'); }
+
+        ws.onmessage = function(m) { 
+          var rbl = JSON.parse(m.data)
+          tr = $('<tr>')
+          if(rbl.result.length > 0) 
+            tr.addClass('danger')
+          tr.append($('<td>').css('class', 'rbl').text(rbl.rbl))
+          tr.append($('<td>').css('class', 'result').text(rbl.result))
+          tr.append($('<td>').css('class', 'message').text(rbl.message))
+          $('#results').append(tr)
+        };
+      })
+     })
+
+%body
+  #field
+    Server Name or IP: 
+    %input{ :id => 'server', :type => 'text', :name => 'server' }
+    %input{ :id => 'submit', :type => 'submit', :name => 'submit' }
+
+  %table#results
+    %tr.heading
+      %th.rbl RBL
+      %th.response Response
+      %th.message Message
+
