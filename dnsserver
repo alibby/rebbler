@@ -1,0 +1,2 @@
+sudo dnsmasq --listen-address 127.0.0.1 --log-queries -d --no-resolv --no-hosts --server 8.8.8.8 --server 8.8.4.4
+
