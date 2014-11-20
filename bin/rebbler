@@ -4,13 +4,26 @@ require 'bundler/setup'
 require 'net/dns'
 require 'pp'
 require 'ostruct'
+require 'optparse'
+
+module RBL
+  class Loader
+    def self.file= file
+      @@filename = file
+    end
+
+    def self.load
+      @@filename ||= File.join(File.dirname(__FILE__), '..', 'rbls.txt')
+      File.readlines(@@filename).sort
+    end
+  end
+end
 
 class Checker
   attr_accessor :ip
 
   def initialize(to_check)
     @ip = resolve_to_ip(to_check)
-
   end
 
   def resolve_to_ip name_to_lookup
@@ -39,7 +52,7 @@ class Checker
   end
 
   def rbls
-    @@rbls ||= File.readlines(File.join(File.dirname(__FILE__), '..', 'rbls.txt')).sort
+    @@rbls ||= RBL::Loader.load
   end
 
   def name_to_lookup(rbl_domain)
@@ -52,6 +65,7 @@ class Checker
 end
 
 def do_server
+  puts "Running server..."
   require 'sinatra'
   require "sinatra/reloader" if development?
   require 'sinatra-websocket'
@@ -112,8 +126,53 @@ def do_commandline
   end
 end
 
-if ARGV.first == 'server'
+def do_nagios_check
+  key = ARGV.first
+  hits = []
+  checker = Checker.new key
+  format = "%-55s %-16s %-s"
+
+  checker.check do |response|
+    hits << OpenStruct.new(response)
+  end
+
+  
+  hits = hits.reject { |v| v.result.to_s == "" }
+  
+  if hits.length == 0
+    puts "OK: %s not listed on any RBLS" % [ key ]
+    exit 0
+  else
+    puts "WARNING: %s listed on %s RBLS." % [ key, hits.length ]
+    exit 2
+  end
+end
+
+options = OpenStruct.new
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{File.basename(__FILE__)} [options]"
+
+  opts.on("-s", "--server", "Run web server") do |v|
+    options.server = v
+  end
+
+  opts.on("-r", "--rbls=filename", "file of RBLs one per line") do |v|
+    puts "Setting rbl list from #{v}"
+    options.rbl_file = v
+    RBL::Loader.file = v
+  end
+
+  opts.on("-n", "--nagios-check", "Nagios RBL check") do |v|
+    options.nagios = v
+  end
+
+end.parse!
+
+if options.server
   do_server
+elsif options.nagios
+  do_nagios_check
 else
   do_commandline
 end
