@@ -124,7 +124,7 @@ def do_commandline
   end
 end
 
-def do_nagios_check
+def do_nagios_check(key)
   hits = []
   format = "%-55s %-16s %-s"
 
@@ -183,7 +183,7 @@ end
 @checker = Checker.new key
 
 if options.nagios
-  do_nagios_check
+  do_nagios_check(key)
 else
   do_commandline
 end
