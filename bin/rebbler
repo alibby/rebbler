@@ -168,23 +168,20 @@ end.parse!
 
 if options.server
   do_server
-  exit 0
-end
-
-
-
-key = ARGV.first
-
-if key == "" or key.nil?
-  $stderr.puts "USAGE: %s {ip|hostname}" % [ File.basename(__FILE__) ]
-  exit 1
-end
-
-@checker = Checker.new key
-
-if options.nagios
-  do_nagios_check(key)
 else
-  do_commandline
+  key = ARGV.first
+  
+  if key == "" or key.nil?
+    $stderr.puts "USAGE: %s {ip|hostname}" % [ File.basename(__FILE__) ]
+    exit 1
+  end
+  
+  @checker = Checker.new key
+  
+  if options.nagios
+    do_nagios_check(key)
+  else
+    do_commandline
+  end
 end
 
