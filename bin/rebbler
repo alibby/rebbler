@@ -117,22 +117,18 @@ def do_server
 end
 
 def do_commandline
-  key = ARGV.first
-  checker = Checker.new key
   format = "%-55s %-16s %-s"
-  checker.check do |response|
+  @checker.check do |response|
     response = OpenStruct.new response
     puts format % [ response.rbl, response.result, response.message ]
   end
 end
 
 def do_nagios_check
-  key = ARGV.first
   hits = []
-  checker = Checker.new key
   format = "%-55s %-16s %-s"
 
-  checker.check do |response|
+  @checker.check do |response|
     hits << OpenStruct.new(response)
   end
 
@@ -166,12 +162,27 @@ OptionParser.new do |opts|
   opts.on("-n", "--nagios-check", "Nagios RBL check") do |v|
     options.nagios = v
   end
-
 end.parse!
+
+
 
 if options.server
   do_server
-elsif options.nagios
+  exit 0
+end
+
+
+
+key = ARGV.first
+
+if key == "" or key.nil?
+  $stderr.puts "USAGE: %s {ip|hostname}" % [ File.basename(__FILE__) ]
+  exit 1
+end
+
+@checker = Checker.new key
+
+if options.nagios
   do_nagios_check
 else
   do_commandline
