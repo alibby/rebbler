@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.description = s.summary
   s.authors     = ["Andrew Libby"]
   s.email       = 'alibby@xforty.com'
-  s.files       = ["rbls.txt", "views/index.haml"]
+  s.files       = ["rbls.txt", "views/index.haml", 'lib/app.rb', 'lib/checker.rb']
   s.executables << 'rebbler'
   s.homepage    = 'http://rubygems.org/gems/hola'
   s.license     = 'MIT'
