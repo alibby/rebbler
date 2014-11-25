@@ -4,21 +4,28 @@
   %title Rebbler
 
   :css
-    #field { 
-      background-color: red; 
-      / margin: 5px; 
-      padding: 5px;
-      /box-shadow: 10px 10px 5px #888888;
+    #field, #results {
+      box-shadow: 1px 1px 5px #888888;
+      border: 1px solid black;
     }
 
-    #server { width: 200px;}
+    #field {
+      height: 1.5em;
+      background-color: #a8a8a8;
+      margin: 0;
+      padding: 15px;
+    }
 
-    #results { 
-      border: 1px solid black; 
-      / min-height: 500px;
+    #field input { border: 1px solid black; }
+
+    #server { width: 200px; }
+
+    #results {
       margin-top: 10px;
       width: 100%;
-      }
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
 
     #results tr:nth-child(odd) { background-color: #A2A2A2; }
     #results .rbl { width: 200px; }
