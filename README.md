@@ -25,3 +25,9 @@ rebbler -n ip|name
 When using as a nagios plugin, the check command definition 
 we use looks like this:
 
+```
+define command{
+  command_name  check_rbl
+        command_line    bash -l -c 'rvm-exec /usr/local/rebbler/bin/rebbler -n $HOSTADDRESS$' 
+  }
+```
