@@ -136,11 +136,14 @@ def do_nagios_check(key)
   hits = hits.reject { |v| v.result.to_s == "" }
   
   if hits.length == 0
-    puts "OK: %s not listed on any RBLS" % [ key ]
+    puts "RBL OK - %s not listed on any RBLS|" % [ key ]
     exit 0
   else
-    puts "WARNING: %s listed on %s RBLS." % [ key, hits.length ]
-    exit 2
+    puts "RBL WARNING - %s listed on %s RBLS||" % [ key, hits.length ]
+    hits.each { |hit|
+       puts format % [ hit.rbl, hit.result, hit.message ]
+    }
+    exit 1
   end
 end
 
