@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'alibby@xforty.com'
   s.files       = ["rbls.txt", "views/index.haml", 'lib/app.rb', 'lib/checker.rb']
   s.executables << 'rebbler'
-  s.homepage    = 'http://rubygems.org/gems/hola'
+  s.homepage    = 'http://github.com/xforty/rebbler'
   s.license     = 'MIT'
   s.add_runtime_dependency 'sinatra', '1.4.5'
   s.add_runtime_dependency 'sinatra-contrib', '1.4.2'
