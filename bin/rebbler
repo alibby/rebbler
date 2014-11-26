@@ -39,26 +39,37 @@ def do_nagios_check(key)
   end
 end
 
+def usage_message
+  "Usage: #{File.basename(__FILE__)} [options]"
+end
+
 options = OpenStruct.new
 
 
-OptionParser.new do |opts|
-  opts.banner = "Usage: #{File.basename(__FILE__)} [options]"
+begin
+  OptionParser.new do |opts|
+    opts.banner = usage_message
 
-  opts.on("-s", "--server", "Run web server") do |v|
-    options.server = v
-  end
+    opts.on("-s", "--server", "Run web server") do |v|
+      options.server = v
+    end
 
-  opts.on("-r", "--rbls=filename", "file of RBLs one per line") do |v|
-    puts "Setting rbl list from #{v}"
-    options.rbl_file = v
-    RBL::Loader.file = v
-  end
+    opts.on("-r", "--rbls=filename", "file of RBLs one per line") do |v|
+      puts "Setting rbl list from #{v}"
+      options.rbl_file = v
+      RBL::Loader.file = v
+    end
 
-  opts.on("-n", "--nagios-check", "Nagios RBL check") do |v|
-    options.nagios = v
-  end
-end.parse!
+    opts.on("-n", "--nagios-check", "Nagios RBL check") do |v|
+      options.nagios = v
+    end
+  end.parse!
+rescue OptionParser::InvalidOption => e
+  $stderr.puts usage_message
+  $stderr.puts
+  $stderr.puts "Unknown option #{e}"
+  exit 5
+end
 
 if options.server
   App.run!
