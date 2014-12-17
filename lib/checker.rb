@@ -37,9 +37,11 @@ class Checker
         rbl_response_code = answer.first.address
         text = resolver.query(name, Net::DNS::TXT).answer
         rbl_txt_message = text.first.nil? ? "" : text.first.txt
-        yield({ rbl: rbl_domain, result: rbl_response_code, message: rbl_txt_message })
+        ttl = text.first.nil? ? 0 : text.first.ttl
+
+        yield({ rbl: rbl_domain, ttl: ttl, result: rbl_response_code, message: rbl_txt_message })
       else
-        yield({ rbl: rbl_domain, result: "", message: 'Not Listed' })
+        yield({ rbl: rbl_domain, ttl: ttl, result: "", message: 'Not Listed' })
       end
     end
   end

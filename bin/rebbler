@@ -10,15 +10,17 @@ require_relative '../lib/checker'
 require_relative '../lib/app'
 
 def do_commandline
-  format = "%-55s %-16s %-s"
+  format = "%-40s %8s %-16s %-s"
+  puts format % [ "RBL", "TTL", "Result", "Message"]
+
   @checker.check do |response|
     response = OpenStruct.new response
-    puts format % [ response.rbl, response.result, response.message ]
+    puts format % [ response.rbl, response.ttl, response.result, response.message ]
   end
 end
 
 def do_nagios_check(key)
-  format = "%-55s %-16s %-s"
+  format = "%-40s %8s %-16s %-s"
   hits = []
 
   @checker.check do |response|
@@ -32,8 +34,9 @@ def do_nagios_check(key)
     exit 0
   else
     puts "RBL WARNING - %s listed on %s RBLS||" % [ key, hits.length ]
+    puts format % [ "RBL", "TTL", "Result", "Message" ]
     hits.each { |hit|
-       puts format % [ hit.rbl, hit.result, hit.message ]
+       puts format % [ hit.rbl, hit.ttl, hit.result, hit.message ]
     }
     exit 1
   end
