@@ -23,8 +23,6 @@ ubl.unsubscore.com
 dnsbl.njabl.org
 combined.njabl.org
 rbl.spamlab.com
-dnsbl.ahbl.org
-ircbl.ahbl.org
 dyna.spamrats.com
 noptr.spamrats.com
 spam.spamrats.com
