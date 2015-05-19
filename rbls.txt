@@ -31,7 +31,6 @@ cdl.anti-spam.org.cn
 dnsbl.inps.de
 drone.abuse.ch
 httpbl.abuse.ch
-dul.ru
 korea.services.net
 short.rbl.jp
 virus.rbl.jp
