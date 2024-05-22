@@ -2,8 +2,6 @@
 
 A tool for testing a mail server or IP against a DNS RBL.
 
-**NOTE: This project has moved to https://gitlab.xforty.com/xforty/rebbler**
-
 # Usage
 
 gem install rebbler
