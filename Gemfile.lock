@@ -1,3 +1,14 @@
+PATH
+  remote: .
+  specs:
+    rebbler (0.0.5)
+      haml
+      net-dns
+      sinatra (~> 3.2.0)
+      sinatra-contrib
+      sinatra-websocket
+      thin
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -50,12 +61,7 @@ PLATFORMS
   x86_64-darwin-22
 
 DEPENDENCIES
-  haml
-  net-dns
-  sinatra
-  sinatra-contrib
-  sinatra-websocket
-  thin
+  rebbler!
 
 RUBY VERSION
    ruby 3.2.0p0
